@@ -14,6 +14,11 @@ namespace CertificateCreator
         static CreateCertificates _cc;
         static void Main(string[] args)
         {
+            Console.Write("Certificate Filename: ");
+            var filename = Console.ReadLine();
+            Console.Write("Certificate Password: ");
+            var password = Console.ReadLine();
+
             var sp = new ServiceCollection()
                .AddCertificateManager()
                .BuildServiceProvider();
@@ -23,11 +28,10 @@ namespace CertificateCreator
             var rsaCert = CreateRsaCertificate("localhost", 10);
             var ecdsaCert = CreateECDsaCertificate("localhost", 10);
 
-            string password = "1234";
             var iec = sp.GetService<ImportExportCertificate>();
 
             var rsaCertPfxBytes = iec.ExportSelfSignedCertificatePfx(password, rsaCert);
-            File.WriteAllBytes("cert_rsa512.pfx", rsaCertPfxBytes);
+            File.WriteAllBytes(filename, rsaCertPfxBytes);
 
             // var ecdsaCertPfxBytes = iec.ExportSelfSignedCertificatePfx(password, ecdsaCert);
             // File.WriteAllBytes("cert_ecdsa384.pfx", ecdsaCertPfxBytes);
